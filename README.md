@@ -62,7 +62,7 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     sudo yum list installed mariadb
     ```
     ```console
-    sql --version
+    mariadb --version
     ```
 
 
