@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >
+  MSP T2 Database Migration
+  RDS PostgreSQL
+
+Resources:
+  PostgreSQL:
+    Type: 'AWS::RDS::DBInstance'
+    Properties:
+    #Engine Options
+      Engine: postgres
+      EngineVersion: 13.4
+    #Templates
+    #Settings
+      DBInstanceIdentifier: targetdb
+      MasterUsername: postgres
+      MasterUserPassword: target1234
+    #DB instance class
+      DBInstanceClass: db.t3.micro
+    #Storage
+      StorageType: gp2
+      AllocatedStorage: 20
+      MaxAllocatedStorage: 1000
+    #Availability & durability
+      MultiAZ: false
+    #Connectivity
+      #DBSubnetGroupName
+      PubliclyAccessible: false
+      #VPCSecurityGroups:
+      #AvailabilityZone:
+      Port: 45432
+    #Database authentication 
+      EnableIAMDatabaseAuthentication: false
+    #Configuration
+      DBName: postgres
+      DBParameterGroupName: default.postgres13
+      BackupRetentionPeriod: 0
+      StorageEncrypted: false
+      EnablePerformanceInsights: false
+      MonitoringInterval: 0
+      #EnableCloudwatchLogsExports: 
+      #  - postgresql
+      AllowMajorVersionUpgrade: false
+      AutoMinorVersionUpgrade: false
+      DeletionProtection: false
+Outputs:
+  InstanceId:
+    Description: InstanceId of the newly created RDS Instance
+    Value: !Ref PostgreSQL
+  EndpointAddress:
+    Description: The connection endpoint for the database
+    Value: !GetAtt PostgreSQL.Endpoint.Address
+  EndpointPort:
+    Description: The port number on which the database accepts connections
+    Value: !GetAtt PostgreSQL.Endpoint.Port
