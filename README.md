@@ -38,37 +38,37 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
 
 ## 3. Install MariaDB Client
 
-1. List the available PostgreSQL toics from the Extras Library
+1. List the available MariaDB toics from the Extras Library
 
     ```console
     sudo amazon-linux-extras | grep postgresql
     ```
 
-2. Enable the desired latest PostgreSQL topic
+2. Enable the desired latest MariaDB topic
 
     ```console
-    sudo amazon-linux-extras enable postgresql13 | grep postgresql
+    sudo amazon-linux-extras enable postgresql13 | grep mariadb
     ```
 
-2. Install PostgreSQL topic
+2. Install MariaDB topic
 
     ```console
-    sudo yum clean metadata && sudo yum install -y postgresql
+    sudo yum clean metadata && sudo yum install -y mariadb
     ```
 
-3. Verify the installation and confirm the PostgreSQL Client version:
+3. Verify the installation and confirm the MariaDB Client version:
 
     ```console
-    sudo yum list installed postgresql
+    sudo yum list installed mariadb
     ```
     ```console
-    psql --version
+    sql --version
     ```
 
 
-## 4. Connect to an Amazon RDS PostgreSQL
+## 4. Connect to an Amazon RDS MariaDB
 
-1. Add inboud rule to Amazon RDS PostgreSQL Security Group
+1. Add inboud rule to Amazon RDS MariaDB Security Group
 
     Find CloudShell IP address
     ```console
@@ -76,7 +76,7 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     echo $CLOUDSHELL_IP_ADDRESS
     ```
     
-    Find Amazon RDS PostgreSQL Security Group ID
+    Find Amazon RDS MariaDB Security Group ID
     ```console
     RDS_SECURITY_GROUP_ID=$(aws rds describe-db-instances \
         --db-instance-identifier targetdb \
@@ -93,9 +93,9 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
       --cidr "${CLOUDSHELL_IP_ADDRESS}/32"
     ```
 
-2. Find Amazon RDS PostgreSQL connection info
+2. Find Amazon RDS MariaDB connection info
 
-    Describe Amazon RDS PostgreSQL instance 
+    Describe Amazon RDS MariaDB instance 
     ```console
     aws rds describe-db-instances \
         --db-instance-identifier targetdb
@@ -119,7 +119,7 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     echo $DB_INSTANCE_ENDPOINT
     ```
 
-3. Connect to Amazon RDS PostgreSQL instance using PostgreSQL Client 
+3. Connect to Amazon RDS MariaDB instance using MariaDB Client 
 
     Save Password to .pgpass file
     ```console
@@ -138,7 +138,7 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
       --dbname=postgres
     ```
     
-    PostgreSQL Client provides a prompt with the name of the database
+    MariaDB Client provides a prompt with the name of the database
     ```console
     psql (13.3, server 13.4)
     SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compression: off)
@@ -148,7 +148,7 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     ```
 
 
-## 5. Create a user, database, schema on Amazon RDS PostgreSQL
+## 5. Create a user, database, schema on Amazon RDS MariaDB
 
 1. Create a user with a password
 
@@ -161,13 +161,13 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     ```sql
     SELECT usename, usecreatedb FROM pg_catalog.pg_user;
     ```
-    <img src="https://github.com/t2yijaeho/Amazon-RDS-PostgreSQL-with-AWS-CloudFormation/blob/matia/images/PostgreSQL%20-%20List%20of%20pg_user.png?raw=true">    
+    <img src="https://github.com/t2yijaeho/Amazon-RDS-MariaDB-with-AWS-CloudFormation/blob/matia/images/MariaDB%20-%20List%20of%20pg_user.png?raw=true">    
     
     List Roles
     ```sql
     \du
     ```
-    <img src="https://github.com/t2yijaeho/Amazon-RDS-PostgreSQL-with-AWS-CloudFormation/blob/matia/images/PostgreSQL%20-%20List%20of%20roles.png?raw=true">
+    <img src="https://github.com/t2yijaeho/Amazon-RDS-MariaDB-with-AWS-CloudFormation/blob/matia/images/MariaDB%20-%20List%20of%20roles.png?raw=true">
 
 2. Create a target database
 
@@ -189,7 +189,7 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     ```sql
     \list
     ```
-    <img src="https://github.com/t2yijaeho/Amazon-RDS-PostgreSQL-with-AWS-CloudFormation/blob/matia/images/PostgreSQL%20-%20List%20of%20Databases.png?raw=true">
+    <img src="https://github.com/t2yijaeho/Amazon-RDS-MariaDB-with-AWS-CloudFormation/blob/matia/images/MariaDB%20-%20List%20of%20Databases.png?raw=true">
 
 3. Create a schema on a database 
 
