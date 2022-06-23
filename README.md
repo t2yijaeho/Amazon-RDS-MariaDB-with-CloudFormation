@@ -272,75 +272,108 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
 ### 3. Connect to Amazon RDS MariaDB instance using MariaDB Client 
 
 
-1. Save Password to .pgpass file
-
-
-    ```console
-    (umask 177 ; \
-      echo $DB_INSTANCE_ENDPOINT:45432:postgres:postgres:target1234 > .pgpass)
-    cat .pgpass
-    ```
-
-
-2. Connect to instance
+1. Connect to instance then MariaDB Client provides a prompt
 
     ```console
-    psql \
-      --host=$DB_INSTANCE_ENDPOINT \
-      --port=45432 \
-      --username=postgres \
-      --no-password \
-      --dbname=postgres
+    mariadb -h $DB_INSTANCE_ENDPOINT  -P 33306 -u admin  --password=target1234
     ```
+    
+   ```console
+    [cloudshell-user@ip-10-0-123-234 ~]$ mariadb -h $DB_INSTANCE_ENDPOINT  -P 33306 -u admin  --password=target1234
+    Welcome to the MariaDB monitor.  Commands end with ; or \g.
+    Your MariaDB connection id is 64
+    Server version: 10.6.7-MariaDB managed by https://aws.amazon.com/rds/
 
+    Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
 
-3. MariaDB Client provides a prompt with the name of the database
+    Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
-
-    ```console
-    psql (13.3, server 13.4)
-    SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compression: off)
-    Type "help" for help.
-
-    postgres=>
-    ```
+    MariaDB [(none)]> 
+    ``` 
 
 
 ## 5. Create a user, database, schema on Amazon RDS MariaDB
 
 
-### 1. Create a user with a password
-
-1. Create User
-    ```sql
-    CREATE USER addrdba
-    WITH PASSWORD '1234';
-    ```
-    
-2. List User
-    ```sql
-    SELECT usename, usecreatedb FROM pg_catalog.pg_user;
-    ```
-    
-3. List Roles
-    ```sql
-    \du
-    ```
-
-
-### 2. Create a target database
+### 1. Create a target database
 
 
 1. Create a database
 
 
     ```sql
-    CREATE DATABASE addr_target
-    TEMPLATE = template0
-    ENCODING = 'UTF8'
-    LC_COLLATE = 'C'
-    LC_CTYPE = 'C';
+    CREATE DATABASE ADDR
+    CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
     ```
+
+    ```sql
+    MariaDB [(none)]> CREATE DATABASE ADDR
+    ->     CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    Query OK, 1 row affected (0.002 sec)
+
+    MariaDB [(none)]> 
+    ```
+
+
+### 2. Create a user
+
+
+1. Create a user with a password
+
+
+    ```sql
+    CREATE USER ADDRDBA
+    IDENTIFIED BY '1234';
+    ```
+    
+    ```sql
+    MariaDB [ADDR]> CREATE USER ADDRDBA
+    -> IDENTIFIED BY '1234';
+    Query OK, 0 rows affected (0.003 sec)
+
+    MariaDB [ADDR]> 
+    ```
+    
+    
+2. List User
+
+
+    ```sql
+    SELECT User FROM mysql.user;
+    ```
+
+    ```sql
+    MariaDB [ADDR]> SELECT User FROM mysql.user;
+    +-------------+
+    | User        |
+    +-------------+
+    | ADDRDBA     |
+    | admin       |
+    | mariadb.sys |
+    | rdsadmin    |
+    +-------------+
+    4 rows in set (0.002 sec)
+
+    MariaDB [ADDR]> 
+    ```
+
+
+3. Add privileges to user
+
+
+    ```sql
+    GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, INDEX, DROP, ALTER, CREATE TEMPORARY TABLES, LOCK TABLES 
+    ON ADDR.* 
+    TO ADDRDBA;
+    ```
+    
+    ```sql
+    GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, INDEX, DROP, ALTER, CREATE TEMPORARY TABLES, LOCK TABLES 
+    ON ADDR.* 
+    TO ADDRDBA;
+    ```
+    
+
 
 
 2. Change database owner to created user
