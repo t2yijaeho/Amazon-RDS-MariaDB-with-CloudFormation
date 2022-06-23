@@ -8,7 +8,9 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
 
 ## 2. Create an Amazon RDS MariaDB
 
+
 1. Get an AWS CloudFormation stack template body
+
 
     ```script
     wget https://github.com/t2yijaeho/Amazon-RDS-MariaDB-with-CloudFormation/raw/matia/Template/RDS-MariaDB.yaml
@@ -24,7 +26,9 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     [cloudshell-user@ip-10-0-123-234 ~]$ 
     ```
 
+
 2. Create an AWS CloudFormation stack
+
 
     ```console
     aws cloudformation create-stack \
@@ -42,14 +46,18 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     [cloudshell-user@ip-10-0-123-234 ~]$ 
     ```
 
+
 3. Monitor the progress by the stack's events in AWS management console
+
 
     <img src="https://github.com/t2yijaeho/Amazon-RDS-MariaDB-with-CloudFormation/blob/matia/images/CloudFormation%20Stack%20Creation%20Events.png?raw=true">
 
 
 ## 3. Install MariaDB Client
 
+
 1. List the available MariaDB toics from the Extras Library
+
 
     ```console
     sudo amazon-linux-extras | grep mariadb
@@ -61,7 +69,9 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     [cloudshell-user@ip-10-0-123-234 ~]$ 
     ```
 
+
 2. Enable the desired latest MariaDB topic
+
 
     ```console
     sudo amazon-linux-extras enable mariadb10.5 | grep mariadb
@@ -74,7 +84,9 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     [cloudshell-user@ip-10-0-123-234 ~]$ 
     ```
 
+
 2. Install MariaDB topic
+
 
     ```console
     sudo yum clean metadata && sudo yum install -y mariadb
@@ -93,7 +105,9 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     [cloudshell-user@ip-10-0-123-234 ~]$ 
     ```
 
+
 3. Verify the installation and confirm the MariaDB Client version:
+
 
     ```console
     sudo yum list installed mariadb
@@ -110,11 +124,15 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     [cloudshell-user@ip-10-0-123-234 ~]$ 
     ```
 
+
 ## 4. Connect to an Amazon RDS MariaDB
 
-###1. Add inboud rule to Amazon RDS MariaDB instance Security Group
+
+### 1. Add inboud rule to Amazon RDS MariaDB instance Security Group
+
 
 1. Find CloudShell IP address
+
 
     ```console
     CLOUDSHELL_IP_ADDRESS=$(curl https://checkip.amazonaws.com)
@@ -131,7 +149,9 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     [cloudshell-user@ip-10-0-123-234 ~]$ 
     ``` 
 
+
 2. Find Amazon RDS MariaDB Security Group ID
+
 
     ```console
     RDS_SECURITY_GROUP_ID=$(aws rds describe-db-instances \
@@ -150,8 +170,10 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     sg-01a234b567cd890ef
     [cloudshell-user@ip-10-0-123-234 ~]$ 
     ``` 
-    
+
+
 3. Add CloudShell IP address to Security Group inboud rule
+
 
     ```console
     aws ec2 authorize-security-group-ingress \
@@ -160,16 +182,21 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
       --cidr "${CLOUDSHELL_IP_ADDRESS}/32"
     ```
 
-###2. Find Amazon RDS MariaDB connection info
+
+### 2. Find Amazon RDS MariaDB connection info
+
 
 1. Describe Amazon RDS MariaDB instance 
+
 
     ```console
     aws rds describe-db-instances \
         --db-instance-identifier targetdb-maria
     ```
-    
+
+
 2. Find Endpoint, Port, Username, Database Name
+
 
     ```console
     aws rds describe-db-instances \
@@ -177,8 +204,10 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
       | jq --raw-output \
         "(\"Endpoint : \" + .DBInstances[0].Endpoint.Address), (\"Port : \" + (.DBInstances[0].Endpoint.Port | tostring)), (\"Master Username : \" + .DBInstances[0].MasterUsername), (\"DB Name : \" + .DBInstances[0].DBName)"
     ```
-    
+
+
 3. Put DB instance endpoint address to a variable
+
 
     ```console
     DB_INSTANCE_ENDPOINT=$(aws rds describe-db-instances \
@@ -188,16 +217,22 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     echo $DB_INSTANCE_ENDPOINT
     ```
 
-###3. Connect to Amazon RDS MariaDB instance using MariaDB Client 
+
+### 3. Connect to Amazon RDS MariaDB instance using MariaDB Client 
+
 
 1. Save Password to .pgpass file
+
+
     ```console
     (umask 177 ; \
       echo $DB_INSTANCE_ENDPOINT:45432:postgres:postgres:target1234 > .pgpass)
     cat .pgpass
     ```
 
+
 2. Connect to instance
+
     ```console
     psql \
       --host=$DB_INSTANCE_ENDPOINT \
@@ -206,8 +241,11 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
       --no-password \
       --dbname=postgres
     ```
-    
+
+
 3. MariaDB Client provides a prompt with the name of the database
+
+
     ```console
     psql (13.3, server 13.4)
     SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compression: off)
@@ -219,7 +257,9 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
 
 ## 5. Create a user, database, schema on Amazon RDS MariaDB
 
-###1. Create a user with a password
+
+### 1. Create a user with a password
+
 
     ```sql
     CREATE USER addrdba
@@ -236,9 +276,12 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     \du
     ```
 
+
 ###2. Create a target database
 
+
 1. Create a database
+
 
     ```sql
     CREATE DATABASE addr_target
@@ -247,25 +290,36 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     LC_COLLATE = 'C'
     LC_CTYPE = 'C';
     ```
-    
-    Change database owner to created user
+
+
+2. Change database owner to created user
     ```sql
     ALTER DATABASE addr_target
     OWNER TO addrdba;
     ```
-    
-    List Databases
+
+
+3. List Databases
+
     ```sql
     \list
     ```
 
-3. Create a schema on a database 
 
-    Connect as a user created
+### 3. Create a schema on a database 
+
+
+1. Connect as a user created
+
+
     ```sql
     \connect addr_target addrdba
     ```
-    User Password
+
+
+2. User Password
+
+
     ```text
     1234
     ```
@@ -279,13 +333,17 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     addr_target=>
     ```
     
-    Create a schema on a newly created database 
+3. Create a schema on a newly created database 
+
+
     ```sql
     CREATE SCHEMA addr
     AUTHORIZATION addrdba;
     ```
     
-    List schemas
+4. List schemas
+
+
     ```sql
     \dn
     ```
