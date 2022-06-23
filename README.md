@@ -411,7 +411,7 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     ```
 
 
-### 3. Create a schema on a database 
+### 3. Change to the created user 
 
 
 1. Exit to CloudShell
