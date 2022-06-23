@@ -314,6 +314,19 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     MariaDB [(none)]> 
     ```
 
+2. Set the current default database
+
+
+    ```sql
+    USE ADDR;
+    ```
+
+    ```sql
+    MariaDB [(none)]> USE ADDR;
+    Database changed
+    MariaDB [ADDR]>  
+    ```
+
 
 ### 2. Create a user
 
@@ -368,76 +381,91 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     ```
     
     ```sql
-    GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, INDEX, DROP, ALTER, CREATE TEMPORARY TABLES, LOCK TABLES 
-    ON ADDR.* 
-    TO ADDRDBA;
+    MariaDB [ADDR]> GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, INDEX, DROP, ALTER, CREATE TEMPORARY TABLES, LOCK TABLES 
+    -> ON ADDR.* 
+    -> TO ADDRDBA;
+    Query OK, 0 rows affected (0.001 sec)
+
+    MariaDB [ADDR]> 
     ```
     
 
+4. List privileges
 
 
-2. Change database owner to created user
     ```sql
-    ALTER DATABASE addr_target
-    OWNER TO addrdba;
+    show grants for 'ADDRDBA';
     ```
 
-
-3. List Databases
-
     ```sql
-    \list
+    MariaDB [ADDR]> show grants for 'ADDRDBA';
+    +-------------------------------------------------------------------------------------------------------------------------------------+
+    | Grants for ADDRDBA@%                                                                                                                |
+    +-------------------------------------------------------------------------------------------------------------------------------------+
+    | GRANT USAGE ON *.* TO `ADDRDBA`@`%` IDENTIFIED BY PASSWORD '*A4B6157319038724E3560894F7F932C8886EBFCF'                              |
+    | GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES, LOCK TABLES ON `ADDR`.* TO `ADDRDBA`@`%` |
+    +-------------------------------------------------------------------------------------------------------------------------------------+
+    2 rows in set (0.001 sec)
+
+    MariaDB [ADDR]> 
     ```
 
 
 ### 3. Create a schema on a database 
 
 
-1. Connect as a user created
+1. Exit to CloudShell
 
 
     ```sql
-    \connect addr_target addrdba
-    ```
-
-
-2. User Password
-
-
-    ```text
-    1234
+    exit
     ```
     
+    ```sql
+    MariaDB [ADDR]> exit
+    Bye
+    [cloudshell-user@ip-10-0-123-234 ~]$ 
+    ```
+
+
+2. Connect as the user created
+
+
     ```console
-    postgres=> \connect addr_target addrdba
-    Password for user addrdba: 
-    psql (13.3, server 13.4)
-    SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compression: off)
-    You are now connected to database "addr_target" as user "addrdba".
-    addr_target=>
+    mariadb -h $DB_INSTANCE_ENDPOINT -P 33306 -u ADDRDBA --password=1234
+    ```
+
+    ```console
+    [cloudshell-user@ip-10-0-123-234 ~]$ mariadb -h $DB_INSTANCE_ENDPOINT -P 33306 -u ADDRDBA --password=1234
+    Welcome to the MariaDB monitor.  Commands end with ; or \g.
+    Your MariaDB connection id is 98
+    Server version: 10.6.7-MariaDB managed by https://aws.amazon.com/rds/
+
+    Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+    Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+    MariaDB [(none)]> 
+    
     ```
     
-3. Create a schema on a newly created database 
+
+3. Verify case-sensitive manner
 
 
     ```sql
-    CREATE SCHEMA addr
-    AUTHORIZATION addrdba;
-    ```
-    
-4. List schemas
-
-
-    ```sql
-    \dn
+    SHOW GLOBAL VARIABLES LIKE 'lower_case_table_names';
     ```
     
     ```sql
-    addr_target=> \dn
-      List of schemas
-      Name  |  Owner   
-    --------+----------
-     addr   | addrdba
-     public | rdsadmin
-    (2 rows)
+    MariaDB [(none)]> SHOW GLOBAL VARIABLES LIKE 'lower_case_table_names';
+    +------------------------+-------+
+    | Variable_name          | Value |
+    +------------------------+-------+
+    | lower_case_table_names | 0     |
+    +------------------------+-------+
+    1 row in set (0.002 sec)
+
+    MariaDB [(none)]> 
     ```
+    
