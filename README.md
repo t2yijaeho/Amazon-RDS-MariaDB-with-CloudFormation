@@ -181,6 +181,29 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
       --protocol tcp --port 33306 \
       --cidr "${CLOUDSHELL_IP_ADDRESS}/32"
     ```
+    
+    ```console
+    [cloudshell-user@ip-10-0-123-234 ~]$ aws ec2 authorize-security-group-ingress \
+    >   --group-id $RDS_SECURITY_GROUP_ID \
+    >   --protocol tcp --port 33306 \
+    >   --cidr "${CLOUDSHELL_IP_ADDRESS}/32"
+    {
+        "Return": true,
+        "SecurityGroupRules": [
+            {
+                "SecurityGroupRuleId": "sgr-1a2b34c56def7g890",
+                "GroupId": "sg-01a234b567cd890ef",
+                "GroupOwnerId": "123456789012",
+                "IsEgress": false,
+                "IpProtocol": "tcp",
+                "FromPort": 33306,
+                "ToPort": 33306,
+                "CidrIpv4": "123.234.234.33/32"
+            }
+        ]
+    }
+    [cloudshell-user@ip-10-0-123-234 ~]$ 
+    ``` 
 
 
 ### 2. Find Amazon RDS MariaDB connection info
@@ -260,24 +283,24 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
 
 ### 1. Create a user with a password
 
-
+1. Create User
     ```sql
     CREATE USER addrdba
     WITH PASSWORD '1234';
     ```
     
-    List User
+2. List User
     ```sql
     SELECT usename, usecreatedb FROM pg_catalog.pg_user;
     ```
     
-    List Roles
+3. List Roles
     ```sql
     \du
     ```
 
 
-###2. Create a target database
+### 2. Create a target database
 
 
 1. Create a database
