@@ -225,7 +225,10 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     aws rds describe-db-instances \
         --db-instance-identifier targetdb-maria \
       | jq --raw-output \
-        "(\"Endpoint : \" + .DBInstances[0].Endpoint.Address), (\"Port : \" + (.DBInstances[0].Endpoint.Port | tostring)), (\"Master Username : \" + .DBInstances[0].MasterUsername), (\"DB Name : \" + .DBInstances[0].DBName)"
+        "(\"Endpoint : \" + .DBInstances[0].Endpoint.Address), \
+         (\"Port : \" + (.DBInstances[0].Endpoint.Port | tostring)), \
+         (\"Master Username : \" + .DBInstances[0].MasterUsername), \
+         (\"DB Name : \" + .DBInstances[0].DBName)"
     ```
 
 
