@@ -32,7 +32,7 @@ Resources:
     #Database authentication 
       EnableIAMDatabaseAuthentication: false
     #Configuration
-      DBName: MariaDB
+      #DBName: MariaDB
       DBParameterGroupName: default.mariadb10.6
       OptionGroupName: default:mariadb-10-6
       BackupRetentionPeriod: 0
