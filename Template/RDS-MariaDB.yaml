@@ -4,19 +4,19 @@ Description: >
   RDS PostgreSQL
 
 Resources:
-  PostgreSQL:
+  MariaDB:
     Type: 'AWS::RDS::DBInstance'
     Properties:
     #Engine Options
-      Engine: postgres
-      EngineVersion: 13.4
+      Engine: mariadb
+      EngineVersion: 10.6
     #Templates
     #Settings
-      DBInstanceIdentifier: targetdb
-      MasterUsername: postgres
+      DBInstanceIdentifier: targetdb-maria
+      MasterUsername: admin
       MasterUserPassword: target1234
     #DB instance class
-      DBInstanceClass: db.t3.micro
+      DBInstanceClass: db.t3.small
     #Storage
       StorageType: gp2
       AllocatedStorage: 20
@@ -28,28 +28,29 @@ Resources:
       PubliclyAccessible: false
       #VPCSecurityGroups:
       #AvailabilityZone:
-      Port: 45432
+      Port: 33306
     #Database authentication 
       EnableIAMDatabaseAuthentication: false
     #Configuration
-      DBName: postgres
-      DBParameterGroupName: default.postgres13
+      DBName: MariaDB
+      DBParameterGroupName: default.mariadb10.6
+      OptionGroupName: default:mariadb-10-6
       BackupRetentionPeriod: 0
       StorageEncrypted: false
       EnablePerformanceInsights: false
       MonitoringInterval: 0
       #EnableCloudwatchLogsExports: 
-      #  - postgresql
+      #  - mariadb
       AllowMajorVersionUpgrade: false
       AutoMinorVersionUpgrade: false
       DeletionProtection: false
 Outputs:
   InstanceId:
     Description: InstanceId of the newly created RDS Instance
-    Value: !Ref PostgreSQL
+    Value: !Ref MariaDB
   EndpointAddress:
     Description: The connection endpoint for the database
-    Value: !GetAtt PostgreSQL.Endpoint.Address
+    Value: !GetAtt MariaDB.Endpoint.Address
   EndpointPort:
     Description: The port number on which the database accepts connections
-    Value: !GetAtt PostgreSQL.Endpoint.Port
+    Value: !GetAtt MariaDB.Endpoint.Port
