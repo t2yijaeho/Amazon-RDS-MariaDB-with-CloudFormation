@@ -10,14 +10,14 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
 
 1. Get an AWS CloudFormation stack template body
 
-    ```bash
+    ```console
     wget https://github.com/t2yijaeho/Amazon-RDS-MariaDB-with-CloudFormation/raw/matia/Template/RDS-MariaDB.yaml
     ```
 
 
 2. Create an AWS CloudFormation stack
 
-    ```bash
+    ```console
     aws cloudformation create-stack \
       --stack-name RDS-MariaDB \
       --template-body file://./RDS-MariaDB.yaml
@@ -41,13 +41,13 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
 1. List the available MariaDB toics from the Extras Library
 
     ```console
-    sudo amazon-linux-extras | grep postgresql
+    sudo amazon-linux-extras | grep mariadb
     ```
 
 2. Enable the desired latest MariaDB topic
 
     ```console
-    sudo amazon-linux-extras enable postgresql13 | grep mariadb
+    sudo amazon-linux-extras enable mariadb10.5 | grep mariadb
     ```
 
 2. Install MariaDB topic
