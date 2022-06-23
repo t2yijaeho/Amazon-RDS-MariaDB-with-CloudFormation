@@ -230,6 +230,21 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
          (\"Master Username : \" + .DBInstances[0].MasterUsername), \
          (\"DB Name : \" + .DBInstances[0].DBName)"
     ```
+    
+    ```console
+    [cloudshell-user@ip-10-0-123-234 ~]$ aws rds describe-db-instances \
+    >     --db-instance-identifier targetdb-maria \
+    >   | jq --raw-output \
+    >     "(\"Endpoint : \" + .DBInstances[0].Endpoint.Address), \
+    >      (\"Port : \" + (.DBInstances[0].Endpoint.Port | tostring)), \
+    >      (\"Master Username : \" + .DBInstances[0].MasterUsername), \
+    >      (\"DB Name : \" + .DBInstances[0].DBName)"
+    Endpoint : targetdb-maria.ab3cdefghijk.us-west-x.rds.amazonaws.com
+    Port : 33306
+    Master Username : admin
+    DB Name : 
+    [cloudshell-user@ip-10-0-123-234 ~]$ 
+    ``` 
 
 
 3. Put DB instance endpoint address to a variable
@@ -242,6 +257,16 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
       --output text)
     echo $DB_INSTANCE_ENDPOINT
     ```
+    
+    ```console
+    [cloudshell-user@ip-10-0-123-234 ~]$ DB_INSTANCE_ENDPOINT=$(aws rds describe-db-instances \
+    >   --db-instance-identifier targetdb-maria \
+    >   --query "DBInstances[0].Endpoint.Address" \
+    >   --output text)
+    [cloudshell-user@ip-10-0-123-234 ~]$ echo $DB_INSTANCE_ENDPOINT
+    targetdb-maria.ab3cdefghijk.us-west-x.rds.amazonaws.com
+    [cloudshell-user@ip-10-0-123-234 ~]$ 
+    ``` 
 
 
 ### 3. Connect to Amazon RDS MariaDB instance using MariaDB Client 
