@@ -1,4 +1,4 @@
-# Amazon RDS PostgreSQL with AWS CloudFormation
+# Amazon RDS MariaDB with AWS CloudFormation
 
 
 ## 1. Launch AWS CloudShell
@@ -6,12 +6,12 @@
 Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
 
 
-## 2. Create an Amazon RDS PostgreSQL
+## 2. Create an Amazon RDS MariaDB
 
 1. Get an AWS CloudFormation stack template body
 
     ```bash
-    wget https://github.com/t2yijaeho/Amazon-RDS-PostgreSQL-with-AWS-CloudFormation/raw/matia/Template/RDS-PostgreSQL.yaml
+    wget https://github.com/t2yijaeho/Amazon-RDS-MariaDB-with-CloudFormation/raw/matia/Template/RDS-MariaDB.yaml
     ```
 
 
@@ -19,49 +19,49 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
 
     ```bash
     aws cloudformation create-stack \
-      --stack-name RDS-PostgreSQL \
-      --template-body file://./RDS-PostgreSQL.yaml
+      --stack-name RDS-MariaDB \
+      --template-body file://./RDS-MariaDB.yaml
     ```
 
 3. AWS CloudFormation returns following output
 
     ```json
     {
-    "StackId": "arn:aws:cloudformation:us-abcd-x:123456789012:stack/RDS-PostgreSQL/b4d0f5e0-d4c2-11ec-9529-06edcc65f112"
+    "StackId": "arn:aws:cloudformation:us-abcd-x:123456789012:stack/RDS-MariaDB/a1b2c3d4-e5f6-78gh-9012-34ijkl56m789"
     }
     ```
 
 4. Monitor the progress by the stack's events in AWS management console
 
-    <img src="https://github.com/t2yijaeho/Amazon-RDS-PostgreSQL-with-AWS-CloudFormation/blob/matia/images/CloudFormation%20Stack%20Creation%20Events.png?raw=true">
+    <img src="https://github.com/t2yijaeho/Amazon-RDS-MariaDB-with-CloudFormation/blob/matia/images/CloudFormation%20Stack%20Creation%20Events.png?raw=true">
 
 
-## 3. Install PostgreSQL Client
+## 3. Install MariaDB Client
 
 1. List the available PostgreSQL toics from the Extras Library
 
-    ```bash
+    ```console
     sudo amazon-linux-extras | grep postgresql
     ```
 
 2. Enable the desired latest PostgreSQL topic
 
-    ```bash
+    ```console
     sudo amazon-linux-extras enable postgresql13 | grep postgresql
     ```
 
 2. Install PostgreSQL topic
 
-    ```bash
+    ```console
     sudo yum clean metadata && sudo yum install -y postgresql
     ```
 
 3. Verify the installation and confirm the PostgreSQL Client version:
 
-    ```bash
+    ```console
     sudo yum list installed postgresql
     ```
-    ```bash
+    ```console
     psql --version
     ```
 
@@ -71,13 +71,13 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
 1. Add inboud rule to Amazon RDS PostgreSQL Security Group
 
     Find CloudShell IP address
-    ```bash
+    ```console
     CLOUDSHELL_IP_ADDRESS=$(curl https://checkip.amazonaws.com)
     echo $CLOUDSHELL_IP_ADDRESS
     ```
     
     Find Amazon RDS PostgreSQL Security Group ID
-    ```bash
+    ```console
     RDS_SECURITY_GROUP_ID=$(aws rds describe-db-instances \
         --db-instance-identifier targetdb \
       | jq --raw-output \
@@ -86,7 +86,7 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     ```
     
     Add CloudShell IP address to Security Group inboud rule
-    ```bash
+    ```console
     aws ec2 authorize-security-group-ingress \
       --group-id $RDS_SECURITY_GROUP_ID \
       --protocol tcp --port 45432 \
@@ -96,13 +96,13 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
 2. Find Amazon RDS PostgreSQL connection info
 
     Describe Amazon RDS PostgreSQL instance 
-    ```bash
+    ```console
     aws rds describe-db-instances \
         --db-instance-identifier targetdb
     ```
     
     Find Endpoint, Port, Username, Database Name
-    ```bash
+    ```console
     aws rds describe-db-instances \
         --db-instance-identifier targetdb \
       | jq --raw-output \
@@ -110,7 +110,7 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     ```
     
     Put DB instance endpoint address to a variable
-    ```bash
+    ```console
     DB_INSTANCE_ENDPOINT=$( \
       aws rds describe-db-instances \
         --db-instance-identifier targetdb \
@@ -122,14 +122,14 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
 3. Connect to Amazon RDS PostgreSQL instance using PostgreSQL Client 
 
     Save Password to .pgpass file
-    ```bash
+    ```console
     (umask 177 ; \
       echo $DB_INSTANCE_ENDPOINT:45432:postgres:postgres:target1234 > .pgpass)
     cat .pgpass
     ```
 
     Connect to instance
-    ```bash
+    ```console
     psql \
       --host=$DB_INSTANCE_ENDPOINT \
       --port=45432 \
@@ -139,7 +139,7 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     ```
     
     PostgreSQL Client provides a prompt with the name of the database
-    ```bash
+    ```console
     psql (13.3, server 13.4)
     SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compression: off)
     Type "help" for help.
@@ -202,7 +202,7 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     1234
     ```
     
-    ```bash
+    ```console
     postgres=> \connect addr_target addrdba
     Password for user addrdba: 
     psql (13.3, server 13.4)
