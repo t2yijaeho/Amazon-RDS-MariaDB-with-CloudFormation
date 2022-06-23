@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >
   MSP T2 Database Migration
-  RDS PostgreSQL
+  RDS MariaDB
 
 Resources:
   MariaDB:
