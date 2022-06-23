@@ -1,0 +1,113 @@
+{
+    "DBInstances": [
+        {
+            "DBInstanceIdentifier": "targetdb",
+            "DBInstanceClass": "db.t3.micro",
+            "Engine": "postgres",
+            "DBInstanceStatus": "available",
+            "MasterUsername": "postgres",
+            "DBName": "postgres",
+            "Endpoint": {
+                "Address": "targetdb.cshwtnbestrc.us-east-2.rds.amazonaws.com",
+                "Port": 45432,
+                "HostedZoneId": "Z2XHWR1WZ565X2"
+            },
+            "AllocatedStorage": 20,
+            "InstanceCreateTime": "2022-05-17T08:03:30.289000+00:00",
+            "PreferredBackupWindow": "10:25-10:55",
+            "BackupRetentionPeriod": 0,
+            "DBSecurityGroups": [],
+            "VpcSecurityGroups": [
+                {
+                    "VpcSecurityGroupId": "sg-021e44f46e04a3813",
+                    "Status": "active"
+                }
+            ],
+            "DBParameterGroups": [
+                {
+                    "DBParameterGroupName": "default.postgres13",
+                    "ParameterApplyStatus": "in-sync"
+                }
+            ],
+            "AvailabilityZone": "us-east-2c",
+            "DBSubnetGroup": {
+                "DBSubnetGroupName": "default",
+                "DBSubnetGroupDescription": "default",
+                "VpcId": "vpc-0b1cf65dc66b263d3",
+                "SubnetGroupStatus": "Complete",
+                "Subnets": [
+                    {
+                        "SubnetIdentifier": "subnet-091fbf1ce13d84fcd",
+                        "SubnetAvailabilityZone": {
+                            "Name": "us-east-2c"
+                        },
+                        "SubnetOutpost": {},
+                        "SubnetStatus": "Active"
+                    },
+                    {
+                        "SubnetIdentifier": "subnet-0b165b70118529763",
+                        "SubnetAvailabilityZone": {
+                            "Name": "us-east-2b"
+                        },
+                        "SubnetOutpost": {},
+                        "SubnetStatus": "Active"
+                    },
+                    {
+                        "SubnetIdentifier": "subnet-026f3d47473383a0a",
+                        "SubnetAvailabilityZone": {
+                            "Name": "us-east-2a"
+                        },
+                        "SubnetOutpost": {},
+                        "SubnetStatus": "Active"
+                    }
+                ]
+            },
+            "PreferredMaintenanceWindow": "wed:03:38-wed:04:08",
+            "PendingModifiedValues": {},
+            "MultiAZ": false,
+            "EngineVersion": "13.4",
+            "AutoMinorVersionUpgrade": false,
+            "ReadReplicaDBInstanceIdentifiers": [],
+            "LicenseModel": "postgresql-license",
+            "OptionGroupMemberships": [
+                {
+                    "OptionGroupName": "default:postgres-13",
+                    "Status": "in-sync"
+                }
+            ],
+            "PubliclyAccessible": false,
+            "StorageType": "gp2",
+            "DbInstancePort": 0,
+            "StorageEncrypted": false,
+            "DbiResourceId": "db-GX66AL4WACLE6U4ZPAIPE6TME4",
+            "CACertificateIdentifier": "rds-ca-2019",
+            "DomainMemberships": [],
+            "CopyTagsToSnapshot": false,
+            "MonitoringInterval": 0,
+            "DBInstanceArn": "arn:aws:rds:us-east-2:123456789012:db:targetdb",
+            "IAMDatabaseAuthenticationEnabled": false,
+            "PerformanceInsightsEnabled": false,
+            "DeletionProtection": false,
+            "AssociatedRoles": [],
+            "MaxAllocatedStorage": 1000,
+            "TagList": [
+                {
+                    "Key": "aws:cloudformation:stack-id",
+                    "Value": "arn:aws:cloudformation:us-east-2:123456789012:stack/RDS-PostgreSQL/af0afda0-d5b6-11ec-a9ce-0a7cc624f63e"
+                },
+                {
+                    "Key": "aws:cloudformation:stack-name",
+                    "Value": "RDS-PostgreSQL"
+                },
+                {
+                    "Key": "aws:cloudformation:logical-id",
+                    "Value": "PostgreSQL"
+                }
+            ],
+            "CustomerOwnedIpEnabled": false,
+            "ActivityStreamStatus": "stopped",
+            "BackupTarget": "region",
+            "NetworkType": "IPV4"
+        }
+    ]
+}
