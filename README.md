@@ -278,7 +278,7 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     mariadb -h $DB_INSTANCE_ENDPOINT  -P 33306 -u admin  --password=target1234
     ```
     
-   ```console
+    ```console
     [cloudshell-user@ip-10-0-123-234 ~]$ mariadb -h $DB_INSTANCE_ENDPOINT  -P 33306 -u admin  --password=target1234
     Welcome to the MariaDB monitor.  Commands end with ; or \g.
     Your MariaDB connection id is 64
