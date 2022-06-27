@@ -421,7 +421,7 @@ Refer to [AWS CloudShell](https://github.com/t2yijaeho/AWS-CloudShell)
     exit
     ```
     
-    ```sql
+    ```console
     MariaDB [ADDR]> exit
     Bye
     [cloudshell-user@ip-10-0-123-234 ~]$ 
